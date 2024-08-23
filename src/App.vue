@@ -11,7 +11,9 @@
       <el-main>
         <RouterView/>
       </el-main>
-      <Footer/>
+      <div v-if="!$route.meta.hideFooter">
+        <Footer/>
+      </div>
     </el-container>
     
   </el-config-provider>
