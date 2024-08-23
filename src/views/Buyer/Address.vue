@@ -31,7 +31,7 @@
       <el-table-column prop="address" label="地址"></el-table-column> 
     <el-table-column label="操作">
       <template #default="scope">
-        <el-button @click="delayAddressRequest(scope.$index)">删除</el-button>
+        <el-button @click="delayAddressRequest(scope.aid)">删除</el-button>
       </template>
     </el-table-column>
     </el-table>  
@@ -75,16 +75,19 @@ export default {
 		getAllAddressesRequest() {
 			this.addresses = [
 				{
+          aid:1,
 					name: 'Test Goods',
 					phone: 1111,
 					address: 114514.19,
 				},
         {
+          aid:2,
 					name: 'Test Goods',
 					phone: 2222,
 					address: 114514.19,
 				},
         {
+          aid:3,
 					name: 'Test Goods',
 					phone: 3333,
 					address: 114514.19,
@@ -106,10 +109,10 @@ export default {
 			});
 		},
     delayAddress,
-    delayAddressRequest(index){
-      console.log(index);    
-      this.addresses.splice(index, 1);
-      delayAddress(this.addresses).then((res) => {
+    delayAddressRequest(Id){
+      console.log(Id);    
+      this.addresses.splice(Id, 1);
+      delayAddress(Id).then((res) => {
 				console.log(res);
 				if (res.status === '200') {
 					ElMessage.success(res.statusText);
