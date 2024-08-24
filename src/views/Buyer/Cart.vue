@@ -10,18 +10,18 @@
 			<template #default="scope">
             <el-image :src="scope.row.productImageBig"></el-image>
             </template>
-		</el-table-column>  
+		</el-table-column> 
         <el-table-column prop="productName" label="商品名称" width="180"></el-table-column>  
         <el-table-column prop="salePrice" label="价格" width="180"></el-table-column>  
         <el-table-column prop="quantity" label="数量" width="180">  
           <template #default="{ row }">  
-            <el-input-number v-model="row.quantity" :min="1" @change="handleQuantityChange(row)"></el-input-number>  
+            <el-input-number v-model="row.quantity" :min="1" :max="findInventory(row.pid)" @change="handleQuantityChange(row)"></el-input-number> 
           </template>  
         </el-table-column>  
         <el-table-column prop="total" label="总价" width="180"></el-table-column>   
         <el-table-column width="180">  
           <template #default="{ row }">  
-            <el-button @click="removeFromCart(row.cid)">删除</el-button> 
+            <el-button @click="removeFromCart(row.cid)">删除</el-button>
           </template>  
         </el-table-column>  
       </el-table>  
@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import {getAddress} from '../../api/apis.js'
+import {getAddress,getCartList,getInventory,afterbuy,remove_cart} from '../../api/apis.js'
 import Postcard from '../../assets/postcard.jpg'
 import Postcard2 from '../../assets/postcard2.jpg'
 export default {
@@ -69,6 +69,7 @@ export default {
 			isSelectAddress:false,
 			isSelectGood:false,
 			selectedGoods:[],
+			inventories:[],
 		}
 	},
 	computed: {  
@@ -81,6 +82,9 @@ export default {
     },  
     },
 	methods: {
+		findInventory(id){
+			return this.inventories.find(item => item.pid===id).inventory;
+		},
 		selectAddress(name,ad,phone){
 			this.esname=name;
 			this.esaddress=ad;
@@ -124,83 +128,190 @@ export default {
 				}
 			});
 		},
+		getInventory,
+		getInventoryRequest(){
+			this.inventories=[
+				{
+					pid:1,
+					inventory:12,
+				},
+				{
+					pid:2,
+					inventory:4,
+				},
+				{
+					pid:3,
+					inventory:5,
+				},
+				{
+					pid:4,
+					inventory:10,
+				},
+				{
+					pid:5,
+					inventory:11,
+				}
+			];
+			getInventory().then((res) => {
+				console.log(res);
+				if (res.status === '200') {
+					this.inventories = res.data
+				} else {
+					if (res.statusText) {
+						ElMessage.error(res.statusText);
+					} else {
+						ElMessage.error('未知错误, Status: ' + res.status);
+
+					}
+				}
+			});
+		},
 		selectFromCart(cid){
 		if(this.selectedGoods.find(item => item.cid === cid) === undefined)	
 			this.selectedGoods.push(this.cartList.find(item =>item.cid===cid));
 		else
 		    this.selectedGoods=this.selectedGoods.filter(item => item.cid !== cid);
 		},
+		getCartList,
 		getAllGoods() {
-			// axios.get(this.getGoodsUrl, {
-			// 	headers: { 'Content-Type': 'application/json'}
-			// }).then(res => {
-			// 	this.goods = res.data;
-			// })
 			this.cartList = [
 				{
 					cid: 1,
+					pid:1,				
 					productName: 'Test Goods',
 					productImageBig: this.Postcard,
 					salePrice: 20.19,
-                    quantity:10,
-					total:201.9,
+                    quantity:1,
+					total:20.19,
 				},
 				{
 					cid: 2,
+					pid:2,
 					productName: 'Test Goods 2',
 					productImageBig: this.Postcard2,
 					salePrice: 11.19,
-                    quantity:20,
-					total:223.8,
+                    quantity:1,
+					total:11.19,
 				},
 				{
 					cid: 3,
+					pid:3,
 					productName: 'Test Goods 3',
 					productImageBig: this.Postcard,
 					salePrice: 10.4,
-                    quantity:15,
-					total:156,
+                    quantity:1,
+					total:10.4,
 				},
 				{
 					cid: 4,
+					pid:4,
 					productName: 'Test Goods 4',
 					productImageBig: this.Postcard,
 					salePrice: 10.3,
-                    quantity:16,
-					total:164.8,
+                    quantity:1,
+					total:10.3,
 				},
 				{
 					cid: 5,
+				    pid:5,
 					productName: 'Test Goods 4',
 					productImageBig: this.Postcard,
 					salePrice: 10.1,
-                    quantity:20,
-					total:202,
+                    quantity:1,
+					total:10.1,
 				},
 			];
+			getCartList().then((res) => {
+				console.log(res);
+				if (res.status === '200') {
+					this.cartList = res.data
+				} else {
+					if (res.statusText) {
+						ElMessage.error(res.statusText);
+					} else {
+						ElMessage.error('未知错误, Status: ' + res.status);
+
+					}
+				}
+			});
 			
 		},
       handleQuantityChange(item) {  
         item.total = item.salePrice * item.quantity;
-      },  
+      }, 
+	  remove_cart, 
       removeFromCart(id) {  
         this.cartList = this.cartList.filter(item => item.cid !== id);
-		this.selectedGoods=this.selectedGoods.filter(item => item.cid !== id);  
-      },  
+		this.selectedGoods=this.selectedGoods.filter(item => item.cid !== id);
+		remove_Cart(id).then(res => {
+            console.log(res);
+            if (res.status === '200') {
+              ElMessage.success(res.statusText);
+            } else {
+              if (res.statusText) {
+                ElMessage.error(res.statusText);
+              } else {
+                ElMessage.error('未知错误, Status: ' + res.status);
+
+              }
+            }
+          }).catch(error => {
+            if (error.response) {
+              // 请求已发出，但服务器响应了状态码不在2xx范围内
+              console.error('Error status', error.response.status);
+              console.error('Error data', error.response.data);
+            } else if (error.request) {
+              // 请求已发出，但没有收到响应
+              console.error('No response received', error.request);
+            } else {
+              // 请求配置时出现错误
+              console.error('Error', error.message);
+            }
+          });
+      },
+	  afterbuy,  
       checkout() {  
         if(this.selectedGoods.length===0)
 		  alert("请选择要购买的商品");
 		else if(this.isSelectAddress==false)
 		  alert("请选择地址");
 		else{
+			afterbuy(this.selectedGoods).then(res => {
+            console.log(res);
+            if (res.status === '200') {
+              ElMessage.success(res.statusText);
+            } else {
+              if (res.statusText) {
+                ElMessage.error(res.statusText);
+              } else {
+                ElMessage.error('未知错误, Status: ' + res.status);
+
+              }
+            }
+          }).catch(error => {
+            if (error.response) {
+              // 请求已发出，但服务器响应了状态码不在2xx范围内
+              console.error('Error status', error.response.status);
+              console.error('Error data', error.response.data);
+            } else if (error.request) {
+              // 请求已发出，但没有收到响应
+              console.error('No response received', error.request);
+            } else {
+              // 请求配置时出现错误
+              console.error('Error', error.message);
+            }
+            });
+			this.selectedGoods.length=0;
 			this.$router.push({path:'/Comment'});
 			alert("购买成功");
 		}
       },
 	},
 	mounted() {
+		this.getInventoryRequest();
 		this.getAllGoods();
 		this.getAllAddressesRequest();
+		
 	}
 
 }
@@ -228,7 +339,7 @@ export default {
 }
 .cart-container{
 	width:100%;
-	text-align: center;
+	text-align: left;
 }
 .cart-footer {  
     margin-top: 60px;  
