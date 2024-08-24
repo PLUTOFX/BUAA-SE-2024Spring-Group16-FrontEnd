@@ -12,7 +12,7 @@
           <el-button @click="openProduct" style="margin: 0 20px" type="primary"
             size="small">查看详情</el-button>
           <el-button style="margin: 0 20px" size="small" @click="addToCartRequest" type="info"
-            v-show="$route.name != 'Goodslist'">加入购物车</el-button>
+            v-show="$route.name != 'Goodslist' && $route.name != 'Comment'">加入购物车</el-button>
           <el-button @click="editProduct" style="margin: 0 20px" type="primary" size="small"
             v-show="$route.name == 'Goodslist'">编辑商品</el-button>
         </div>
