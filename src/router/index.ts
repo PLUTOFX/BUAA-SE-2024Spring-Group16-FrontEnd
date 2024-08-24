@@ -14,11 +14,13 @@ const routes = [
   {
     path: '/login',
     name: 'login',
+    meta: { hideFooter: true },
     component: () => import("../views/Login.vue")
   },
   {
     path: '/register',
     name: 'register',
+    meta: { hideFooter: true },
     component: () => import("../views/Register.vue")
   },
   {
@@ -60,7 +62,7 @@ const routes = [
     path: '/Seller/EditGoods/:goodsId',
     name: 'EditGoods',
     component: () => import("../views/Seller/EditGoods.vue")
-  },
+  }, 
   {
     path: '/Seller/Goodslist',
     name: 'Goodslist',
