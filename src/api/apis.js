@@ -57,5 +57,11 @@ export const getAddress = params => http.fetchPost(`/address/get_address?usernam
 // add address
 export const addAddress = params => http.fetchPost('/address/add_address',params);
 // delay address
-export const delayAddress =params => http.fetchPost('/address/delay_address',params); 
+export const delayAddress =params => http.fetchPost('/address/delay_address',params);
+//remove from cart
+export const remove_cart = params => http.fetchPost('/cart/remove_cart',params);
+//get inventory
+export const getInventory = params => http.fetchPost('/cart/get_Inventory',params);
+//checkout
+export const afterbuy = params => http.fetchPost('/cart/checkout',params);
 

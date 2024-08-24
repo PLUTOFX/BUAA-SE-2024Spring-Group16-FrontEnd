@@ -3,6 +3,7 @@ import Homepage from '../views/Buyer/Homepage.vue';
 import Reviewpage from '~/views/Buyer/Reviewpage.vue';
 import path from 'path';
 import { compile } from 'vue';
+import { componentSizeMap } from 'element-plus';
 
 const routes = [
   {
@@ -67,7 +68,7 @@ const routes = [
     path: '/Seller/Goodslist',
     name: 'Goodslist',
     component: () => import("../views/Seller/GoodsList.vue")
-  }
+  },
 
 ];
 
