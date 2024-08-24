@@ -8,7 +8,7 @@
 
 ARG NODE_VERSION=20.11.0
 
-FROM node:${NO                                                                DE_VERSION}-alpine
+FROM node:${NODE_VERSION}-alpine
 
 # Use production node environment by default.
 # ENV NODE_ENV development
