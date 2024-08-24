@@ -15,11 +15,13 @@ const routes = [
   {
     path: '/login',
     name: 'login',
+    meta: { hideFooter: true },
     component: () => import("../views/Login.vue")
   },
   {
     path: '/register',
     name: 'register',
+    meta: { hideFooter: true },
     component: () => import("../views/Register.vue")
   },
   {
@@ -58,10 +60,10 @@ const routes = [
     component: () => import("../views/Seller/AddGoods.vue")
   },
   {
-    path: '/Seller/EditGoods',
+    path: '/Seller/EditGoods/:goodsId',
     name: 'EditGoods',
     component: () => import("../views/Seller/EditGoods.vue")
-  },
+  }, 
   {
     path: '/Seller/Goodslist',
     name: 'Goodslist',

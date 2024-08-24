@@ -3,7 +3,7 @@
 		<el-tab-pane label="商品">
 			<div class="img-item">
 				<div class="goods-box w">
-					<GoodsCard v-for="(item, i) in goods" :key="i" :msg="item"></GoodsCard>
+					<GoodsCard v-for="(item, i) in goods" :key="i" :productID="item.pid" :productName="item.name" :productImageBig="item.imageSrc" :salePrice="item.price"></GoodsCard>
 				</div>
 				<!-- <el-pagination
 						v-if="!noResult&&!error"
@@ -20,7 +20,7 @@
 		<el-tab-pane label="商店">
 			<div class="img-item">
 				<div class="goods-box w">
-					<ShopCard v-for="(item, i) in shops" :key="i" :msg="item"></ShopCard>
+					<ShopCard v-for="(item, i) in shops" :key="i" :shopId="item.sid" :shopName="item.shopName" :shopGoodsImage="item.shopGoodsImage" :shopSubscriberCount="item.shopSubscriberCount" :shopSaleCount="item.shopSaleCount"></ShopCard>
 				</div>
 			</div>
 		</el-tab-pane>
@@ -46,93 +46,94 @@ export default {
 		searchShops,
 		getResult() {
 			let keywords = this.$route.params.keyword;
-			this.goods = [
-				{
-					productId: 1,
-					productName: 'Test Goods',
-					productImageBig: this.Postcard,
-					salePrice: 114514.19,
-				},
-				{
-					productId: 2,
-					productName: 'Test Goods 2',
-					productImageBig: this.Postcard2,
-					salePrice: 11.19,
-				},
-				{
-					productId: 3,
-					productName: 'Test Goods 3',
-					productImageBig: this.Postcard,
-					salePrice: 4514.19,
-				},
-				{
-					productId: 4,
-					productName: 'Test Goods 4',
-					productImageBig: this.Postcard,
-					salePrice: 810.114,
-				},
-				{
-					productId: 5,
-					productName: 'Test Goods 4',
-					productImageBig: this.Postcard,
-					salePrice: 810.114,
-				},
-			];
-			this.shops = [
-				{
-					shopId: 1,
-					shopName: 'Cygames',
-					// 商店图片取最多四张，即长度不超过4的图片路径数组(String)
-					shopGoodsImage: [Postcard],
-					shopSubscriberCount: 1000,
-					shopSaleCount: 2000,
-				},
-				{
-					shopId: 2,
-					shopName: 'Bemani Sound Team',
-					// 商店图片取最多四张
-					shopGoodsImage: [Postcard, Postcard2],
-					shopSubscriberCount: 1000,
-					shopSaleCount: 2000,
-				},
-				{
-					shopId: 3,
-					shopName: 'Animate',
-					// 商店图片取最多四张
-					shopGoodsImage: [Postcard, Postcard2, Postcard],
-					shopSubscriberCount: 1000,
-					shopSaleCount: 2000,
-				},
-				{
-					shopId: 4,
-					shopName: 'Capcom',
-					// 商店图片取最多四张
-					shopGoodsImage: [Postcard, Postcard2, Postcard, Postcard2],
-					shopSubscriberCount: 1000,
-					shopSaleCount: 2000,
-				}
-			];
+			// this.goods = [
+			// 	{
+			// 		productId: 1,
+			// 		productName: 'Test Goods',
+			// 		productImageBig: this.Postcard,
+			// 		salePrice: 114514.19,
+			// 	},
+			// 	{
+			// 		productId: 2,
+			// 		productName: 'Test Goods 2',
+			// 		productImageBig: this.Postcard2,
+			// 		salePrice: 11.19,
+			// 	},
+			// 	{
+			// 		productId: 3,
+			// 		productName: 'Test Goods 3',
+			// 		productImageBig: this.Postcard,
+			// 		salePrice: 4514.19,
+			// 	},
+			// 	{
+			// 		productId: 4,
+			// 		productName: 'Test Goods 4',
+			// 		productImageBig: this.Postcard,
+			// 		salePrice: 810.114,
+			// 	},
+			// 	{
+			// 		productId: 5,
+			// 		productName: 'Test Goods 4',
+			// 		productImageBig: this.Postcard,
+			// 		salePrice: 810.114,
+			// 	},
+			// ];
+			// this.shops = [
+			// 	{
+			// 		shopId: 1,
+			// 		shopName: 'Cygames',
+			// 		// 商店图片取最多四张，即长度不超过4的图片路径数组(String)
+			// 		shopGoodsImage: [Postcard],
+			// 		shopSubscriberCount: 1000,
+			// 		shopSaleCount: 2000,
+			// 	},
+			// 	{
+			// 		shopId: 2,
+			// 		shopName: 'Bemani Sound Team',
+			// 		// 商店图片取最多四张
+			// 		shopGoodsImage: [Postcard, Postcard2],
+			// 		shopSubscriberCount: 1000,
+			// 		shopSaleCount: 2000,
+			// 	},
+			// 	{
+			// 		shopId: 3,
+			// 		shopName: 'Animate',
+			// 		// 商店图片取最多四张
+			// 		shopGoodsImage: [Postcard, Postcard2, Postcard],
+			// 		shopSubscriberCount: 1000,
+			// 		shopSaleCount: 2000,
+			// 	},
+			// 	{
+			// 		shopId: 4,
+			// 		shopName: 'Capcom',
+			// 		// 商店图片取最多四张
+			// 		shopGoodsImage: [Postcard, Postcard2, Postcard, Postcard2],
+			// 		shopSubscriberCount: 1000,
+			// 		shopSaleCount: 2000,
+			// 	}
+			// ];
 			searchGoods({keywords: keywords}).then(res => {
-				if (res.status === '200') {
+				if (res.stateCode == '200') {
 					this.goods = res.data;
 				} else {
-					if (res.statusText) {
-						ElMessage.error(res.statusText);
+					if (res.stateMsg) {
+						ElMessage.error(res.stateMsg);
 					} else {
-						ElMessage.error('未知错误, Status: ' + res.status);
+						ElMessage.error('未知错误, Status: ' + res.stateCode);
 
 					}
 				}
 			});
 
 			searchShops({keywords: keywords}).then(res => {
-				if (res.status === '200') {
+				console.log(res.data)
+				if (res.stateCode == '200') {
 					this.shops = res.data;
 				} else {
-					if (res.statusText) {
-						ElMessage.error(res.statusText);
+					if (res.stateMsg) {
+						ElMessage.error(res.stateMsg);
 					} else {
-						ElMessage.error('未知错误, Status: ' + res.status);
+						ElMessage.error('未知错误, Status: ' + res.stateCode);
 
 					}
 				}

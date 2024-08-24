@@ -1,16 +1,5 @@
 <template>
-    <el-container>
-      <el-aside width="200px" style="margin-top: 10%">
-        <el-menu :default-openeds="['1']" router>
-          <el-menu-item index="/Seller/GoodsList">商品列表</el-menu-item>
-          <el-menu-item index="/Seller/AddGoods">上架商品</el-menu-item>
-          <el-menu-item index="/Seller/EditGoods">编辑商品</el-menu-item>
-        </el-menu>
-      </el-aside>
-  
-    </el-container>
-
-    <div class="form-container">
+  <div class="form-container">
     <el-form :model="good" label-width="100px">
       <el-form-item label="商品名称">
         <el-input v-model="good.name"></el-input>
@@ -34,8 +23,7 @@
       </el-form-item>
     </el-form>
   </div>
-
-  </template>
+</template>
   
   <script>
   export default {
@@ -64,42 +52,34 @@
 };
   </script>
   
-  <style scoped>
-    #container {
-    box-shadow: 0 15px 30px 1px rgba(128, 128, 128, 0.31);
-    background: rgba(255, 255, 255, 0.90);
-    text-align: center;
-    border-radius: 5px;
-    overflow: hidden;
-    margin: 5em auto;
-    height: 100%;
-    width: 1220px;
-    }
-    .form-container {
-    max-width: 600px; 
-    margin: 0 auto; 
-    padding: 20px; 
-    background-color: #fff; 
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1); 
-    border-radius: 8px; 
-    }
+<style scoped>
 
-    .el-form-item {
-    margin-bottom: 20px; 
-    }
+.form-container {
+  max-width: 600px; 
+  margin: 0 auto; 
+  padding: 20px; 
+  background-color: #fff; 
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1); 
+  border-radius: 8px; 
+  margin-top: 100px;
+}
 
-    .form-actions {
-    text-align: center; 
-    }
+.el-form-item {
+  margin-bottom: 20px; 
+}
 
-    .el-input,
-    .el-upload,
-    .el-input-number {
-    width: 100%; 
-    }
+.form-actions {
+  text-align: center; 
+}
 
-    .el-button {
-    width: 100%; 
-    }
-  
-  </style>
+.el-input,
+.el-upload,
+.el-input-number {
+  width: 100%; 
+}
+
+.el-button {
+  width: 100%; 
+}
+
+</style>

@@ -16,7 +16,12 @@
       </el-sub-menu>
       <el-menu-item index="3" @click="gotoCart()">购物车</el-menu-item>
       <el-menu-item index="4" v-if="!isLogined" @click="gotoLoginPage">注册/登录</el-menu-item>
-      <el-menu-item index="4" v-if="isLogined">退出登录</el-menu-item>
+      <el-menu-item index="4" v-if="isLogined" @click="signOut">退出登录</el-menu-item>
+      <el-sub-menu index="5" v-show="$route.name == 'Goodslist' || $route.name == 'AddGoods' || $route.name == 'EditGoods'">
+        <template #title>我的商店</template>
+        <el-menu-item @click="gotoGoodsList" index="5-1">商品列表</el-menu-item>
+        <el-menu-item @click="gotoAddGoods" index="5-2">上架商品</el-menu-item>
+      </el-sub-menu>
       <el-menu-item h="full" @click="toggleDark()">
         <button class="border-none w-full bg-transparent cursor-pointer" style="height: var(--ep-menu-item-height)">
           <i inline-flex i="dark:ep-moon ep-sunny" />
@@ -51,7 +56,7 @@ export default {
   },
   computed: {
     isLogined() {
-      return localStorage.getItem["loginUserName"] ? true : false;
+      return localStorage.getItem("loginUserName") ? true : false;
     }
   },
   methods: {
@@ -61,22 +66,37 @@ export default {
     gotoHomePage() {
       this.$router.push({ path: '/' });
     },
+    gotoGoodsList() {
+      this.$router.push({ path: "/Seller/GoodsList"});
+    },
+    gotoAddGoods() {
+      this.$router.push({ path: "/Seller/AddGoods"});
+    },
     gotoSearch() {
       this.isSearch = true;
     },
     gotoAddress(){
       this.$router.push({path:'/address'})
     },
+    gotoCart(){
+      this.$router.push({path:'/cart'})
+    },
     searchByKeywords() {
       if (this.keyword !== '') {
         this.$router.push({path: `/Search/${this.keyword}`});
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       }
+    },
+    signOut() {
+      localStorage.removeItem('loginUserName');
+      localStorage.removeItem('loginUserType');
+      window.location.reload();
+      // this.$router.replace({path: '/'})
     },
     toggleDark,
     markRaw,
-    gotoCart(){
-      this.$router.push({path:'/cart'})
-    }
   }
 }
 </script>

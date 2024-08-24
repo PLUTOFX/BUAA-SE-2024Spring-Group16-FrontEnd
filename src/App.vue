@@ -1,5 +1,6 @@
 <script setup>
   import { RouterLink, RouterView } from 'vue-router';
+  import Footer from './components/layouts/Footer.vue';
 </script>
 <template>
   <el-config-provider namespace="ep">
@@ -10,9 +11,12 @@
       <el-main>
         <RouterView/>
       </el-main>
+      <Footer v-show="$route.name != 'login' && $route.name != 'register'"></Footer>
     </el-container>
-
+    
   </el-config-provider>
+  
+  
 </template>
 
 <style>

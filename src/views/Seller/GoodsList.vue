@@ -1,13 +1,5 @@
 <template>
     <el-container>
-      <el-aside width="200px" style="margin-top: 10%">
-        <el-menu :default-openeds="['1']" router>
-          <el-menu-item index="/Seller/GoodsList">商品列表</el-menu-item>
-          <el-menu-item index="/Seller/AddGoods">上架商品</el-menu-item>
-          <el-menu-item index="/Seller/EditGoods">编辑商品</el-menu-item>
-        </el-menu>
-      </el-aside>
-      
       <div class="main-content">
         <div class="hot-goods">
           <h3>热门商品</h3>
@@ -31,18 +23,6 @@
           </div>
         </div>
         
-        <el-table :data="goodsList">
-          <el-table-column prop="name" label="商品名称" />
-          <el-table-column prop="price" label="单价" />
-          <el-table-column prop="storage" label="库存量" />
-          <el-table-column prop="sales" label="销量" />
-          <el-table-column label="操作">
-            <template slot-scope="scope">
-              <el-button @click="editGoods(scope.row)">编辑</el-button>
-              <el-button @click="setHotGoods(scope.row)">设为热门</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
       </div>
     </el-container>
   </template>
@@ -125,33 +105,40 @@
   };
   </script>
   
-  <style scoped>
-  .el-container {
-    display: flex;
-  }
+<style scoped>
+.el-container {
+  display: flex;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+}
+
+.goods-box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.goods-box > GoodsCard {
+  flex: 1 1 calc(25% - 20px); 
+  box-sizing: border-box; 
+  max-width: calc(25% - 20px); 
+}
   
-  .main-content {
-    flex: 1;
-    padding: 20px;
-  }
+.hot-goods, .goods-list {
+  width: 80%; 
+  margin: 0 auto; 
+  padding: 20px; 
+}
   
-  .goods-box {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    margin-top: 16px;
-  }
+h3 {
+  margin-bottom: 16px;
+}
   
-  .hot-goods, .goods-list {
-    margin-bottom: 32px;
-  }
-  
-  h3 {
-    margin-bottom: 16px;
-  }
-  
-  .el-table {
-    margin-top: 20px;
-  }
-  </style>
+.el-table {
+  margin-top: 20px;
+}
+</style>
   

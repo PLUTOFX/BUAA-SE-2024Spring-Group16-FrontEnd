@@ -1,14 +1,14 @@
 <template>
 	<!-- 展示用的商品卡片 -->
-	<div class="shop-item" @click="openShop(msg.shopId)">
+	<div class="shop-item" @click="openShop">
 		<div class="good-img">
-			<!-- <a @click="openShop(msg.shopId)">
-				<img :src="msg.productImageBig" :alt="msg.productName" :key="msg.productImageBig">
+			<!-- <a @click="openShop(shopId)">
+				<img :src="productImageBig" :alt="productName" :key="productImageBig">
 			</a> -->
-			<h6 class="good-title">{{ msg.shopName }}</h6>
+			<h6 class="good-title">{{ shopName }}</h6>
 			<div class="shop-goodsImage">
 				<el-row>
-					<template v-for="(goods, i) in msg.shopGoodsImage" :key="i">
+					<template v-for="(goods, i) in shopGoodsImage" :key="i">
 						<el-col :span=12>
 							<el-image fit="cover" :src="goods" style="margin: 5%"/>
 						</el-col>
@@ -17,8 +17,8 @@
 			</div>
 			<div class="shop-bottom">
 				<el-row>
-					<el-col :span="12">粉丝数 {{ msg.shopSubscriberCount }}</el-col>
-					<el-col :span="12">总销量 {{ msg.shopSaleCount }}</el-col>
+					<el-col :span="12">粉丝数 {{ shopSubscriberCount }}</el-col>
+					<el-col :span="12">总销量 {{ shopSaleCount }}</el-col>
 				</el-row>
 			</div>
 		</div>
@@ -27,12 +27,11 @@
 
 <script>
 export default {
-	props: {
-		msg: {}
-	},
+	props: ['shopId', 'shopName', 'shopGoodsImage', 'shopSubscriberCount', 'shopSaleCount'],
 	methods: {
-		openShop(id) {
-			this.$router.replace({ path: '/shopDetail/' + id });
+		openShop() {
+			
+			this.$router.replace({ path: '/shopDetail/' + this.shopId });
 			// this.goodsDetails(id);
 			// window.open('//' + window.location.host + '/goodsDetail?shopId=' + id)
 		},

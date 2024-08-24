@@ -4,12 +4,36 @@
       <el-dialog :visible.sync="dialogVisible">
         <img width="100%" :src="dialogImageUrl" alt="" />
       </el-dialog>
-      <div>
-          <GoodsCard :msg="selectedGoods" justify-content="center" display="block" margin="0 auto"/>
+      <div style="display: flex; justify-content: center; align-items: center; margin-top: 40px;">
+          <GoodsCard :msg="selectedGoods"/>
       </div>
 
       <div id="container" class="product-comment">
-        
+        <el-rate v-model="rate" :allow-half="true" show-score />
+        <div style="display: flex; gap: 20px; align-items: flex-start;">
+          <el-input
+            type="textarea"
+            v-model="content"
+            placeholder="请输入您的评价"
+            rows="4"
+          />
+    
+          <el-upload
+            ref="upload"
+            action="http://localhost:3000/upload" 
+            list-type="picture-card"
+            :on-preview="handlePreview"
+            :on-success="handleUploadSuccess"
+            :on-remove="handleRemove"
+            :file-list="fileList"
+          >
+            <i class="el-icon-plus"></i>
+          </el-upload>
+        </div>
+        <div class="submit-section" style="margin-bottom: 40px;">
+        <el-button type="primary" @click="submitComment">提交评价</el-button>
+        </div>
+
         <el-row justify="center">
           <h2>商品评价</h2>
           <el-divider></el-divider>
@@ -34,29 +58,7 @@
       <div id="container" class="comment-section">
         
   
-        <el-rate v-model="rate" :allow-half="true" show-score />
-  
-        <el-input
-          type="textarea"
-          v-model="content"
-          placeholder="请输入您的评价"
-          rows="4"
-        />
-  
-        <el-upload
-          ref="upload"
-          action="http://localhost:3000/upload" 
-          list-type="picture-card"
-          :on-preview="handlePreview"
-          :on-success="handleUploadSuccess"
-          :on-remove="handleRemove"
-          :file-list="fileList"
-        >
-          <i class="el-icon-plus"></i>
-        </el-upload>
-        <div class="submit-section">
-        <el-button type="primary" @click="submitComment">提交评价</el-button>
-        </div>
+      
       </div>
     </div>
   </template>

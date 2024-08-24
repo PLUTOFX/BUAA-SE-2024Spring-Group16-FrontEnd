@@ -18,6 +18,16 @@ import "uno.css";
 
 import router from './router/index'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+import { ElMessage } from "element-plus";
+
+router.beforeEach((to, from, next) => {
+    if (localStorage.getItem('loginUserName') == null && to.path != '/login' && to.path != '/register' ) {
+        ElMessage.warning('请先登录');
+        next('/login');
+    } else {
+        next();
+    }
+});
 
 const app = createApp(App);
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
