@@ -9,29 +9,19 @@
       </div>
 
       <div id="container" class="product-comment">
-        <el-rate v-model="rate" :allow-half="true" show-score />
-        <div style="display: flex; gap: 20px; align-items: flex-start;">
+        <div style="top: 0; left: 50%; transform: translateX(-40%) translateY(100%);">
+          <el-rate v-model="rate" :allow-half="true" show-score />
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 20px; padding-top: 60px;">
           <el-input
             type="textarea"
             v-model="content"
             placeholder="请输入您的评价"
             rows="4"
           />
-    
-          <el-upload
-            ref="upload"
-            action="http://localhost:3000/upload" 
-            list-type="picture-card"
-            :on-preview="handlePreview"
-            :on-success="handleUploadSuccess"
-            :on-remove="handleRemove"
-            :file-list="fileList"
-          >
-            <i class="el-icon-plus"></i>
-          </el-upload>
-        </div>
-        <div class="submit-section" style="margin-bottom: 40px;">
-        <el-button type="primary" @click="submitComment">提交评价</el-button>
+          <div class="submit-section" style="margin-top: 20px; margin-bottom: 40px;">
+            <el-button type="primary" @click="submitComment">提交评价</el-button>
+          </div>
         </div>
 
         <el-row justify="center">
