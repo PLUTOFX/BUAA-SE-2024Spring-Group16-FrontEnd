@@ -3,7 +3,7 @@ import Homepage from '../views/Buyer/Homepage.vue';
 import Reviewpage from '~/views/Buyer/Reviewpage.vue';
 import path from 'path';
 import { compile } from 'vue';
-
+//
 const routes = [
   {
     path: '/',
