@@ -11,7 +11,7 @@
       <el-main>
         <RouterView/>
       </el-main>
-      <Footer/>
+      <Footer v-show="$route.name != 'login' && $route.name != 'register'"></Footer>
     </el-container>
     
   </el-config-provider>

@@ -9,7 +9,7 @@
 	<div class="img-item">
 		<!--商品-->
 		<div class="goods-box w">
-			<GoodsCard v-for="(item, i) in goods" :key="i" :msg="item"></GoodsCard>
+			<GoodsCard v-for="(item, i) in goods" :key="i" :productID="item.productID" :productName="item.productName" :productImageBig="item.productImageBig" :salePrice="item.salePrice"></GoodsCard>
 		</div>
 		<!-- <el-pagination
           v-if="!noResult&&!error"
@@ -30,66 +30,77 @@ import { ElMessage } from 'element-plus'
 import { getAllGoods } from '../../api/apis';
 import Postcard from '../../assets/postcard.jpg'
 import Postcard2 from '../../assets/postcard2.jpg'
+import axios from 'axios'
 
 export default {
 	data() {
 		return {
+			axios,
 			ElMessage,
 			Postcard,
 			Postcard2,
 			goods: [],
-			getGoodsUrl: '',
 		}
 	},
 	methods: {
 		getAllGoods,
 		getAllGoodsRequest() {
-			this.goods = [
-				{
-					productId: 1,
-					productName: 'Test Goods',
-					productImageBig: this.Postcard,
-					salePrice: 114514.19,
-				},
-				{
-					productId: 2,
-					productName: 'Test Goods 2',
-					productImageBig: this.Postcard2,
-					salePrice: 11.19,
-				},
-				{
-					productId: 3,
-					productName: 'Test Goods 3',
-					productImageBig: this.Postcard,
-					salePrice: 4514.19,
-				},
-				{
-					productId: 4,
-					productName: 'Test Goods 4',
-					productImageBig: this.Postcard,
-					salePrice: 810.114,
-				},
-				{
-					productId: 5,
-					productName: 'Test Goods 4',
-					productImageBig: this.Postcard,
-					salePrice: 810.114,
-				},
-			];
+			// this.goods = [
+			// 	{
+			// 		productID: 1,
+			// 		productName: 'Test Goods',
+			// 		productImageBig: this.Postcard,
+			// 		salePrice: 114514.19,
+			// 	},
+			// 	{
+			// 		productID: 2,
+			// 		productName: 'Test Goods 2',
+			// 		productImageBig: this.Postcard2,
+			// 		salePrice: 11.19,
+			// 	},
+			// 	{
+			// 		productID: 3,
+			// 		productName: 'Test Goods 3',
+			// 		productImageBig: this.Postcard,
+			// 		salePrice: 4514.19,
+			// 	},
+			// 	{
+			// 		productID: 4,
+			// 		productName: 'Test Goods 4',
+			// 		productImageBig: this.Postcard,
+			// 		salePrice: 810.114,
+			// 	},
+			// 	{
+			// 		productID: 5,
+			// 		productName: 'Test Goods 4',
+			// 		productImageBig: this.Postcard,
+			// 		salePrice: 810.114,
+			// 	},
+			// ];
 
-			// getAllGoods().then((res) => {
+			// axios.get('http://localhost:8888/products/all').then(res => {
 			// 	console.log(res);
-			// 	if (res.status == '200') {
-			// 		this.goods = res.data
-			// 	} else {
-			// 		if (res.statusText) {
-			// 			ElMessage.error(res.statusText + ' Status: ' + res.status);
-			// 		} else {
-			// 			ElMessage.error('未知错误, Status: ' + res.status);
-
-			// 		}
+			// 	if (res.stateCode == '200') {
+			// 		// console.log(res.data);
+			// 		// this.goods = res.data;
+			// 		console.log(res.data.data);
 			// 	}
-			// });
+			// }).catch(err => {
+			// 	console.log(err);
+			// })
+
+			getAllGoods().then((res) => {
+				console.log(res.data);
+				if (res.stateCode == '200') {
+					this.goods = res.data
+				} else {
+					if (res.statusMsg) {
+						ElMessage.error(res.stateMsg + ' Status: ' + res.stateCode);
+					} else {
+						ElMessage.error('未知错误, Status: ' + res.stateCode);
+					}
+				}
+			});
 		}
 	},
 	mounted() {

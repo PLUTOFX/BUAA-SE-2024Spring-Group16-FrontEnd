@@ -2,21 +2,21 @@
   <!-- 展示用的商品卡片 -->
   <div class="good-item">
     <div class="good-img">
-      <a @click="openProduct(msg.productId)">
-        <img :src="msg.productImageBig" :alt="msg.productName" :key="msg.productImageBig">
+      <a @click="openProduct">
+        <img :src="productImageBig" :alt="productName" :key="productImageBig">
       </a>
-      <h6 class="good-title">{{ msg.productName }}</h6>
-      <!-- <h3 class="sub-title ellipsis">{{ msg.subTitle }}</h3> -->
+      <h6 class="good-title">{{ productName }}</h6>
+      <!-- <h3 class="sub-title ellipsis">{{ subTitle }}</h3> -->
       <div class="good-price pr">
         <div class="ds pa good-btn">
-          <el-button @click="openProduct(msg.productId)" style="margin: 0 20px" type="primary"
+          <el-button @click="openProduct" style="margin: 0 20px" type="primary"
             size="small">查看详情</el-button>
-          <el-button style="margin: 0 20px" size="small" @btnClick="addCart(msg.productId)"
-            type="info" v-show="$route.name != 'Goodslist'">加入购物车</el-button>
-          <el-button @click="editProduct(msg.productId)" style="margin: 0 20px" type="primary" 
-            size="small" v-show="$route.name == 'Goodslist'">编辑商品</el-button>
+          <el-button style="margin: 0 20px" size="small" @click="addToCartRequest" type="info"
+            v-show="$route.name != 'Goodslist'">加入购物车</el-button>
+          <el-button @click="editProduct" style="margin: 0 20px" type="primary" size="small"
+            v-show="$route.name == 'Goodslist'">编辑商品</el-button>
         </div>
-        <p><span style="font-size:14px">￥</span>{{ Number(msg.salePrice).toFixed(2) }}</p>
+        <p><span style="font-size:14px">￥</span>{{ Number(salePrice).toFixed(2) }}</p>
       </div>
     </div>
   </div>
@@ -27,17 +27,13 @@ import { addToCart, getGoodsDetail } from '../api/apis';
 import { ElMessage } from 'element-plus'
 
 export default {
-  props: {
-    msg: {
-      // salePrice: 0
-    }
-  },
+  props: ['productID', 'productName', 'productImageBig', 'salePrice'],
   data() {
     return {
       ElMessage,
       buyInfo: {
         pid: -1,
-        userName: '',
+        username: '',
         version: '',
         quantity: 1,
       },
@@ -46,51 +42,49 @@ export default {
   methods: {
     getGoodsDetail,
     addToCart,
-    goodsDetails(id) {
-      console.log(this.$route);
-      this.$router.push(`/goodsDetail/${id}`)
+    goodsDetails() {
+      // console.log();
+      // this.$router.push(`/goodsDetail/${productID}`)
       // + product id
     },
-    openProduct(id) {
-      this.goodsDetails(id);
-      // window.open('//' + window.location.host + '/goodsDetail?productId=' + id)
+    openProduct() {
+      console.log(this.productID);
+      this.$router.push(`/goodsDetail/${Number(this.productID)}`)
     },
-    editProduct(id) {
+    editProduct() {
       console.log(this.$route);
-      this.$router.push(`/Seller/EditGoods/${id}`);
+      this.$router.push(`/Seller/EditGoods/${this.productID}`);
     },
-    addToCartRequest(id) {
-      this.getGoodsDetailRequest(id);
-      this.buyInfo.pid = id;
+    addToCartRequest() {
+      this.getGoodsDetailRequest(this.productID);
+      this.buyInfo.pid = this.productID;
       this.buyInfo.quantity = 1;
-      this.buyInfo.userName = localStorage.getItem['loginUserName'];
+      this.buyInfo.username = localStorage.getItem('loginUserName');
       if (this.buyInfo.version) {
         addToCart(this.buyInfo).then(res => {
-          if (res.status == '200') {
+          if (res.stateCode == '200') {
             ElMessage.success('加入购物车成功');
           } else {
             this.buyInfo.version = null;
-            if (res.statusText) {
-              ElMessage.error(res.statusText + ' Status: ' + res.status);
+            if (res.stateMsg) {
+              ElMessage.error(res.stateMsg + ' Status: ' + res.stateCode);
             } else {
-              ElMessage.error('未知错误, Status: ' + res.status);
+              ElMessage.error('未知错误, Status: ' + res.stateCode);
             }
           }
         })
       }
     },
-    getGoodsDetailRequest(pid) {
-      console.log(pid);
-
-      getGoodsDetail({ id: pid }).then(res => {
-        if (res.status == '200') {
+    getGoodsDetailRequest() {
+      getGoodsDetail({ id: this.productID }).then(res => {
+        if (res.stateCode == '200') {
           this.buyInfo.version = res.data.version[0];
         } else {
           this.buyInfo.version = null;
-          if (res.statusText) {
-            ElMessage.error(res.statusText + ' Status: ' + res.status);
+          if (res.stateMsg) {
+            ElMessage.error(res.stateMsg + ' Status: ' + res.stateCode);
           } else {
-            ElMessage.error('未知错误, Status: ' + res.status);
+            ElMessage.error('未知错误, Status: ' + res.stateCode);
 
           }
         }
@@ -155,8 +149,9 @@ export default {
     text-align: center;
     overflow: hidden;
   }
+
   #edit-product {
-  float: right;
-}
+    float: right;
+  }
 }
 </style>

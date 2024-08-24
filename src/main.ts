@@ -21,7 +21,7 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import { ElMessage } from "element-plus";
 
 router.beforeEach((to, from, next) => {
-    if (localStorage.getItem['loginUserName'] == null && to.path != '/login' && to.path != '/register' ) {
+    if (localStorage.getItem('loginUserName') == null && to.path != '/login' && to.path != '/register' ) {
         ElMessage.warning('请先登录');
         next('/login');
     } else {

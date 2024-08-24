@@ -11,9 +11,9 @@
         </el-tab-pane>
       </el-tabs>
       <div class="mid">
-        <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" status-icon>
-          <el-form-item prop="userName">
-            <el-input class="info" v-model="dataForm.userName" placeholder="帐号"></el-input>
+        <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" stateCode-icon>
+          <el-form-item prop="username">
+            <el-input class="info" v-model="dataForm.username" placeholder="帐号"></el-input>
           </el-form-item>
           <el-form-item prop="password">
             <el-input class="info" v-model="dataForm.password" type="password" Y placeholder="密码"></el-input>
@@ -43,12 +43,12 @@ export default {
       ElMessage,
       dataForm: {
         userType: 'buyer',
-        userName: '',
+        username: '',
         password: '',
         confirmedPassword: '',
       },
       dataRule: {
-        userName: [
+        username: [
           { required: true, message: '用户名不能为空', trigger: 'blur' }
         ],
         password: [
@@ -58,7 +58,6 @@ export default {
           { validator: this.confirmedPasswordValiadator, trigger: 'blur' },
         ]
       },
-      registerUrl: '',
     }
   },
   methods: {
@@ -67,25 +66,30 @@ export default {
     dataFormSubmit() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          userRegister(this.dataForm).then(res => {
+          console.log(this.dataForm);
+          userRegister({
+            username: this.dataForm.username,
+            password: this.dataForm.password,
+            userType: this.dataForm.userType,
+          }).then(res => {
             console.log(res);
-            if (res.status === '200') {
-              // localStorage.setItem['loginUserName'] = this.dataForm.userName;
+            if (res.stateCode == '200') {
+              // localStorage.setItem['loginUserName'] = this.dataForm.username;
               // localStorage.setItem['loginUserType'] = this.dataForm.userType;
-              ElMessage.success(res.statusText);
+              ElMessage.success('注册成功');
               this.$router.push({ path: '/login' })
             } else {
-              if (res.statusText) {
-                ElMessage.error(res.statusText);
+              if (res.stateMsg) {
+                ElMessage.error(res.stateMsg);
               } else {
-                ElMessage.error('未知错误, Status: ' + res.status);
+                ElMessage.error('未知错误, Status: ' + res.stateCode);
 
               }
             }
           }).catch(error => {
             if (error.response) {
               // 请求已发出，但服务器响应了状态码不在2xx范围内
-              console.error('Error status', error.response.status);
+              console.error('Error stateCode', error.response.stateCode);
               console.error('Error data', error.response.data);
             } else if (error.request) {
               // 请求已发出，但没有收到响应

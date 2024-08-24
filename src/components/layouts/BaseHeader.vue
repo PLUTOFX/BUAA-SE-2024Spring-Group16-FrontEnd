@@ -56,7 +56,7 @@ export default {
   },
   computed: {
     isLogined() {
-      return localStorage.getItem["loginUserName"] ? true : false;
+      return localStorage.getItem("loginUserName") ? true : false;
     }
   },
   methods: {
@@ -84,12 +84,16 @@ export default {
     searchByKeywords() {
       if (this.keyword !== '') {
         this.$router.push({path: `/Search/${this.keyword}`});
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       }
     },
     signOut() {
-      localStorage.removeItem['loginUserName'];
-      localStorage.removeItem['loginUserType'];
-      this.$router.replace({path: '/login'})
+      localStorage.removeItem('loginUserName');
+      localStorage.removeItem('loginUserType');
+      window.location.reload();
+      // this.$router.replace({path: '/'})
     },
     toggleDark,
     markRaw,

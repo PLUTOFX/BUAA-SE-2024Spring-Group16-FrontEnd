@@ -11,9 +11,10 @@
         </el-tab-pane>
       </el-tabs>
       <div class="mid">
-        <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" status-icon>
-          <el-form-item prop="userName">
-            <el-input class="info" v-model="dataForm.userName" placeholder="帐号"></el-input>
+        <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()"
+          stateCode-icon>
+          <el-form-item prop="username">
+            <el-input class="info" v-model="dataForm.username" placeholder="帐号"></el-input>
           </el-form-item>
           <el-form-item prop="password">
             <el-input class="info" v-model="dataForm.password" type="password" Y placeholder="密码"></el-input>
@@ -32,6 +33,7 @@
 import { ElMessage } from 'element-plus'
 import LoginPage from '../assets/LoginPage.png'
 import { userLogin } from '../api/apis';
+import axios from 'axios';
 
 export default {
   data() {
@@ -39,12 +41,12 @@ export default {
       ElMessage,
       LoginPage,
       dataForm: {
-        userName: '',
+        username: '',
         password: '',
         userType: 'buyer',
       },
       dataRule: {
-        userName: [
+        username: [
           { required: true, message: '用户名不能为空', trigger: 'blur' }
         ],
         password: [
@@ -59,7 +61,9 @@ export default {
     // 提交表单
     userLogin,
     dataFormSubmit() {
-      console.log(this.dataForm.userType);
+      console.log(this.dataForm);
+
+
       // if (this.dataForm.userType == 'buyer') {
       //   this.$router.push({ path: '/' });
       // } else {
@@ -69,25 +73,40 @@ export default {
         if (valid) {
           userLogin(this.dataForm).then(res => {
             console.log(res);
-            if (res.status === '200') {
-              localStorage.setItem['loginUserName'] = this.dataForm.userName;
-              localStorage.setItem['loginUserType'] = this.dataForm.userType;
-              ElMessage.success('登录成功');
+            if (res.stateCode == '200') {
+              localStorage.setItem('loginUserName', this.dataForm.username);
+              localStorage.setItem('loginUserType', this.dataForm.userType);
+              ElMessage.success('登录成功');            
               if (this.dataForm.userType == 'buyer') {
                 this.$router.push({ path: '/' });
               } else {
                 this.$router.push({ path: '/Seller/Goodslist' });
               }
+              setTimeout(() => {
+                window.location.reload();
+              }, 500);
             } else {
-              if (res.statusText) {
-                ElMessage.error(res.statusText);
+              if (res.stateMsg) {
+                ElMessage.error(res.stateMsg);
               } else {
-                ElMessage.error('未知错误, Status: ' + res.status);
+                ElMessage.error('未知错误, Status: ' + res.stateCode);
 
               }
             }
           }
           );
+          // axios.post(`/users/login?username=${this.dataForm.username}&password=${this.dataForm.password}&type=${this.dataForm.userType}`, params, {
+          //   'content-Type': 'application/x-www-form-urlencoded'
+          // }).then(res => {
+          //   console.log(res);
+          //   if (res.data.stateCode == '200') {
+          //     console.log('ok')
+          //   } else {
+          //     console.log(res.data.stateCode);
+          //   }
+          // }).catch(err => {
+          //   console.error(err);
+          // })
         }
       });
     },

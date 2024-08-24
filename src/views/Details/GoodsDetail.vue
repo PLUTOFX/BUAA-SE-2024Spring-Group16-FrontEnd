@@ -42,7 +42,7 @@
 				</el-col>
 				<el-col>
 					<el-select v-model="selectedAid" style=" width: 70%;">
-						<el-option v-for="(address, i) in userAddress" :key="i" :label="address.addressName"
+						<el-option v-for="(address, i) in userAddress" :key="i" :label="address.name + ' ' + address.phone + ' ' + address.address"
 							:value="address.aid">
 						</el-option>
 					</el-select>
@@ -71,7 +71,7 @@
 			</el-col>
 			<el-col :span="12">
 				<div class="product-image">
-					<img :src="goods.imageSrc[0]" />
+					<img :src="goods.imageSrc" />
 				</div>
 			</el-col>
 		</el-row>
@@ -95,7 +95,7 @@
 		<template v-for="(comment, i) in goods.comments" :key="i">
 			<el-row>
 				<el-col :span="8" style="text-align: left;" class="ml-10">
-					<h2> {{ comment.userName }}</h2>
+					<h2> {{ comment.username }}</h2>
 				</el-col>
 				<el-col :span="5" style="text-align: left;" class="mt-5">
 					<el-rate v-model="comment.rate" allow-half disabled />
@@ -113,7 +113,7 @@
 </template>
 
 <script>
-import { getGoodsDetail, addToCart, subscribeShop, cancelSubscribingShop, collectProduct, cancelCollectingProduct, checkProductCollected, checkShopSubscribed, buyImmediately } from '../../api/apis';
+import { getGoodsDetail, addToCart, subscribeShop, cancelSubscribingShop, collectProduct, cancelCollectingProduct, checkProductCollected, checkShopSubscribed, getAddress, buyImmediately } from '../../api/apis';
 import { ElMessage } from 'element-plus'
 
 export default {
@@ -121,22 +121,23 @@ export default {
 		return {
 			ElMessage,
 			goods: {
+				productId: 0,
 				name: '测试商品名称',
 				storage: 20,
-				version: ['S', 'M', 'L', 'XL', 'XXL', 'custom'],
+				version: [''],
 				price: 100.01,
-				imageSrc: ['https://sc01.alicdn.com/kf/HTB1Cic9HFXXXXbZXpXXq6xXFXXX3/200006212/HTB1Cic9HFXXXXbZXpXXq6xXFXXX3.jpg', '', ''],
+				imageSrc: 'https://sc01.alicdn.com/kf/HTB1Cic9HFXXXXbZXpXXq6xXFXXX3/200006212/HTB1Cic9HFXXXXbZXpXXq6xXFXXX3.jpg',
 				details: 'This is a test product.',
 				shopName: 'Bemani Sound Team',
 				shopId: 1,
 				comments: [
 					{
-						userName: 'Ibuki Ayapa',
+						username: 'Ibuki Ayapa',
 						rate: 5.0,
 						content: 'I love it.'
 					},
 					{
-						userName: 'Minato Aqua',
+						username: 'Minato Aqua',
 						rate: 3.5,
 						content: 'Otsuaqua!'
 					},
@@ -146,30 +147,26 @@ export default {
 			userAddress: [
 				{
 					aid: 3,
-					addressName: '妖怪之山',
+					name: '射命丸文',
+					phone: '123',
+					address: '妖怪之山',
 				},
-				{
-					aid: 4,
-					addressName: '博丽神社',
-				},
-				{
-					aid: 5,
-					addressName: '虹龙洞',
-				}
 			],
 			buyInfo: {
 				pid: -1,
-				userName: '',
+				username: '',
 				version: '',
 				quantity: 1,
 			},
 			shopSubscribed: false,
 			productCollected: false,
 			selectedAid: -1,
+			username: '',
 		};
 	},
 
 	mounted() {
+		this.buyInfo.username = localStorage.getItem('loginUserName');
 		this.getGoodsDetailRequest();
 		this.getUserAddressRequest();
 		this.checkProductCollectedRequest();
@@ -188,19 +185,21 @@ export default {
 		checkProductCollected,
 		checkShopSubscribed,
 		buyImmediately,
+		getAddress,
 		getGoodsDetailRequest() {
 			console.log(this.$route.params.goodsId);
 			// this.goods.productId = this.$route.params.goodsId;
-			getGoodsDetail({ id: this.$route.params.goodsId }).then(res => {
-				if (res.status == '200') {
+			getGoodsDetail({id: this.$route.params.goodsId}).then(res => {
+				if (res.stateCode == '200') {
+					console.log(res.data);
 					this.goods = res.data;
 					this.goods.productId = this.$route.params.goodsId;
 					this.buyInfo.pid = this.$route.params.goodsId;
 				} else {
-					if (res.statusText) {
-						ElMessage.error(res.statusText);
+					if (res.stateMsg) {
+						ElMessage.error(res.stateMsg);
 					} else {
-						ElMessage.error('未知错误, Status: ' + res.status);
+						ElMessage.error('未知错误, Status: ' + res.stateCode);
 
 					}
 				}
@@ -215,13 +214,13 @@ export default {
 		},
 		addToCartRequest() {
 			addToCart(this.buyInfo).then(res => {
-				if (res.status == '200') {
+				if (res.stateCode == '200') {
 					ElMessage.success('添加至购物车成功')
 				} else {
-					if (res.statusText) {
-						ElMessage.error(res.statusText);
+					if (res.stateMsg) {
+						ElMessage.error(res.stateMsg);
 					} else {
-						ElMessage.error('未知错误, Status: ' + res.status);
+						ElMessage.error('未知错误, Status: ' + res.stateCode);
 
 					}
 				}
@@ -231,33 +230,34 @@ export default {
 		buyImmediatelyRequest() {
 			console.log(this.selectedAid);
 			buyImmediately({
-				username: this.buyInfo.userName,
+				username: this.buyInfo.username,
 				pid: this.buyInfo.pid,
 				version: this.buyInfo.version,
 				quantity: this.buyInfo.quantity,
 				aid: this.selectedAid,
 			}).then(res => {
-				if (res.status == '200') {
+				if (res.stateCode == '200') {
 					console.log(res.data);
 					this.$router.push(`/Comment/${res.data}`);
 				} else {
-					if (res.statusText) {
-						ElMessage.error(res.statusText);
+					if (res.stateMsg) {
+						ElMessage.error(res.stateMsg);
 					} else {
-						ElMessage.error('未知错误, Status: ' + res.status);
+						ElMessage.error('未知错误, Status: ' + res.stateCode);
 					}
 				}
 			});
 		},
 		subscribeShopRequest() {
-			subscribeShop({ userName: localStorage.getItem['loginUserName'], sid: this.goods.shopId }).then(res => {
-				if (res.status == '200') {
+			subscribeShop({ username: this.buyInfo.username, sid: this.goods.shopId }).then(res => {
+				if (res.stateCode == '200') {
 					ElMessage.success('关注店铺成功');
+					this.shopSubscribed = true;
 				} else {
-					if (res.statusText) {
-						ElMessage.error(res.statusText);
+					if (res.stateMsg) {
+						ElMessage.error(res.stateMsg);
 					} else {
-						ElMessage.error('未知错误, Status: ' + res.status);
+						ElMessage.error('未知错误, Status: ' + res.stateCode);
 
 					}
 				}
@@ -265,75 +265,90 @@ export default {
 			this.checkShopSubscribedRequest();
 		},
 		cancelSubscribingShopRequest() {
-			cancelSubscribingShop({ userName: localStorage.getItem['loginUserName'], sid: this.goods.shopId }).then(res => {
-				if (res.status == '200') {
+			cancelSubscribingShop({ username: this.buyInfo.username, sid: this.goods.shopId }).then(res => {
+				if (res.stateCode == '200') {
 					ElMessage.success('取消关注店铺成功');
+					this.shopSubscribed = false;
 				} else {
-					if (res.statusText) {
-						ElMessage.error(res.statusText);
+					if (res.stateMsg) {
+						ElMessage.error(res.stateMsg);
 					} else {
-						ElMessage.error('未知错误, Status: ' + res.status);
+						ElMessage.error('未知错误, Status: ' + res.stateCode);
 					}
 				}
 			});
 			this.checkShopSubscribedRequest();
 		},
 		collectProductRequest() {
-			collectProduct({ userName: localStorage.getItem['loginUserName'], pid: this.$route.params.goodsId }).then(res => {
-				if (res.status == '200') {
+			collectProduct({ username: this.buyInfo.username, pid: this.$route.params.goodsId }).then(res => {
+				if (res.stateCode == '200') {
 					ElMessage.success('收藏商品成功');
+					this.productCollected = true;
 				} else {
-					if (res.statusText) {
-						ElMessage.error(res.statusText);
+					if (res.stateMsg) {
+						ElMessage.error(res.stateMsg);
 					} else {
-						ElMessage.error('未知错误, Status: ' + res.status);
+						ElMessage.error('未知错误, Status: ' + res.stateCode);
 					}
 				}
 			});
 			this.checkProductCollectedRequest();
 		},
 		cancelCollectingProductRequest() {
-			cancelCollectingProduct({ userName: localStorage.getItem['loginUserName'], pid: this.$route.params.goodsId }).then(res => {
-				if (res.status == '200') {
+			cancelCollectingProduct({ username: this.buyInfo.username, pid: this.$route.params.goodsId }).then(res => {
+				if (res.stateCode == '200') {
 					ElMessage.success('取消收藏商品成功');
+					this.productCollected = false;
 				} else {
-					if (res.statusText) {
-						ElMessage.error(res.statusText);
+					if (res.stateMsg) {
+						ElMessage.error(res.stateMsg);
 					} else {
-						ElMessage.error('未知错误, Status: ' + res.status);
+						ElMessage.error('未知错误, Status: ' + res.stateCode);
 					}
 				}
 			});
 			this.checkProductCollectedRequest();
 		},
 		checkProductCollectedRequest() {
-			checkProductCollected({ userName: localStorage.getItem['loginUserName'], pid: this.$route.params.goodsId }).then(res => {
-				if (res.status == '200') {
+			checkProductCollected({ username: this.buyInfo.username, pid: this.$route.params.goodsId }).then(res => {
+				if (res.stateCode == '200') {
 					this.productCollected = res.data;
+					console.log(this.productCollected)
 				} else {
-					if (res.statusText) {
-						ElMessage.error(res.statusText);
+					if (res.stateMsg) {
+						ElMessage.error(res.stateMsg);
 					} else {
-						ElMessage.error('未知错误, Status: ' + res.status);
+						ElMessage.error('未知错误, Status: ' + res.stateCode);
 					}
 				}
 			});
 		},
 		checkShopSubscribedRequest() {
-			checkShopSubscribed({ userName: localStorage.getItem['loginUserName'], sid: this.goods.shopId }).then(res => {
-				if (res.status == '200') {
+			checkShopSubscribed({ username: this.buyInfo.username, sid: this.goods.shopId }).then(res => {
+				if (res.stateCode == '200') {
 					this.shopSubscribed = res.data;
+					console.log(this.shopSubscribed)
 				} else {
-					if (res.statusText) {
-						ElMessage.error(res.statusText);
+					if (res.stateMsg) {
+						ElMessage.error(res.stateMsg);
 					} else {
-						ElMessage.error('未知错误, Status: ' + res.status);
+						ElMessage.error('未知错误, Status: ' + res.stateCode);
 					}
 				}
 			});
 		},
 		getUserAddressRequest() {
-			// 
+			// getAddress({username: this.buyInfo.username}).then(res => {
+			// 	if (res.stateCode == '200') {
+			// 		this.address = res.data;
+			// 	} else {
+			// 		if (res.stateMsg) {
+			// 			ElMessage.error(res.stateMsg);
+			// 		} else {
+			// 			ElMessage.error('未知错误, Status: ' + res.stateCode);
+			// 		}
+			// 	}
+			// }); 
 		}
 	},
 };

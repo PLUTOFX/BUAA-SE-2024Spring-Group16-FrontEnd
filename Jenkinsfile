@@ -11,7 +11,11 @@ pipeline {
             steps {
                 script {
                     // 构建 Docker 镜像 
-                    sh 'docker build -t group16-frontend:latest .'
+                    sh '''kubectl delete deployment frontend-.yaml
+                    docker rmi 
+                    docker build --no-cache -t group16-frontend:latest .
+                    kubectl apply -f deployment_frontend.yaml
+                    '''
                 }
             }
         }
