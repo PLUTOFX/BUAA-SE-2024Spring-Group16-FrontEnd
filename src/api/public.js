@@ -4,7 +4,7 @@ console.log('NODE_ENV', process.env.NODE_ENV);
 const env = process.env.NODE_ENV;
 const urlEnv = {
   development: 'http://localhost:8888',
-  production: 'http://localhost:8888'
+  production: 'http://localhost:30001'
 };
 
 const BASE_URL = urlEnv[env];
