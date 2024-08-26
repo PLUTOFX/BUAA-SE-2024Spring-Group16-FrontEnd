@@ -49,7 +49,7 @@ const routes = [
     component:()=>import("../views/Buyer/Address.vue")
   },
   {
-    path: '/Comment',
+    path: '/Comment/:goodsId',
     name: 'Comment',
     component: () => import("../views/Buyer/Commentpage.vue")
   },
