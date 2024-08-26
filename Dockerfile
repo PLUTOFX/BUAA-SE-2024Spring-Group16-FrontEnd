@@ -8,7 +8,7 @@
 
 ARG NODE_VERSION=20.11.0
 
-FROM node:${NO                                                                DE_VERSION}-alpine
+FROM node:${NODE_VERSION}-alpine
 
 # Use production node environment by default.
 # ENV NODE_ENV development
@@ -35,8 +35,6 @@ USER root
 # Copy the rest of the source files into the image.
 COPY . .
 
-# Expose the port that the application listens on.
-# EXPOSE 5173
 RUN npm run build
 # 使用 Nginx 作为生产环境的 Web 服务器
 FROM nginx:alpine
@@ -49,7 +47,3 @@ EXPOSE 80
 
 # 启动 Nginx
 CMD ["nginx", "-g", "daemon off;"]
-
-# Run the application.
-# CMD ["npm", "run", "dev"]
-# RUN npm run build
