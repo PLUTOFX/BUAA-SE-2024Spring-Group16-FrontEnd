@@ -47,8 +47,7 @@
 </template>
 
 <script>
-
-import axios from 'axios';
+import {getAddress,getCartList,getInventory,afterbuy,remove_cart} from '../../api/apis.js'
 import Postcard from '../../assets/postcard.jpg'
 import Postcard2 from '../../assets/postcard2.jpg'
 import { readonly } from 'vue';
@@ -66,6 +65,10 @@ export default {
 			selectedAid: -1,
 			userAddress: [],
 			dialogVisible: false,
+			isSelectAddress:false,
+			isSelectGood:false,
+			selectedGoods:[],
+			inventories:[],
 		}
 	},
 	computed: {
@@ -264,8 +267,8 @@ export default {
 	display: flex;
 	flex-direction: column;
 }
-
-.cart-container {
+.cart-container{
+	width:100%;
 	text-align: left;
 }
 
