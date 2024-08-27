@@ -158,7 +158,7 @@ export default {
 				this.getCartInfoRequest();
 			}, 20);
 			this.$router.replace('/');
-			this.$router.replace('/cart');
+			this.$router.replace('/Cart');
 			// this.getCartInfoRequest();
 			// this.cartList = this.cartList.filter(item => item.productId !== id);  
 		},
@@ -168,7 +168,7 @@ export default {
 					console.log(res.data);
 					if (res.data.length == 0) {
 						ElMessage.info('请先设置收货地址');
-						this.$router.push('/address');
+						this.$router.push('/Address');
 					} else {
 						this.userAddress = res.data;
 						this.selectedAid = this.userAddress[0].aid;

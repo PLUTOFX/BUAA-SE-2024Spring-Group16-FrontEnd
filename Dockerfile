@@ -39,6 +39,9 @@ RUN npm run build
 # 使用 Nginx 作为生产环境的 Web 服务器
 FROM nginx:alpine
 
+# 复制nginx.conf到 Nginx 的目录下
+COPY ./nginx.conf /etc/nginx/nginx.conf
+
 # 将构建生成的静态文件复制到 Nginx 的默认目录
 COPY --from=0 /usr/src/app/dist /usr/share/nginx/html
 

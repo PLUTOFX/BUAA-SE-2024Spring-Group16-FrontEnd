@@ -111,6 +111,7 @@ export default {
         console.log(res);
         if (res.stateCode == '200') {
           ElMessage.success('删除收货地址成功');
+          this.getAllAddressesRequest();
         } else {
           if (res.stateMsg) {
             ElMessage.error(res.stateMsg);
@@ -135,6 +136,7 @@ export default {
               // localStorage.setItem['loginUserName'] = this.dataForm.userName;
               // localStorage.setItem['loginUserType'] = this.dataForm.userType;
               ElMessage.success('添加收货地址成功');
+              this.getAllAddressesRequest();    
               this.showDialog = false;
             } else {
               if (res.stateMsg) {

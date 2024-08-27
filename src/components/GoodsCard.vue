@@ -49,7 +49,7 @@ export default {
     },
     openProduct() {
       console.log(this.productID);
-      this.$router.push(`/goodsDetail/${Number(this.productID)}`)
+      this.$router.push(`/GoodsDetail/${Number(this.productID)}`)
     },
     editProduct() {
       console.log(this.$route);

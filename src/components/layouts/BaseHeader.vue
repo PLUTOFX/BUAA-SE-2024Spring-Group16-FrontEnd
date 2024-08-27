@@ -84,10 +84,10 @@ export default {
       this.isSearch = true;
     },
     gotoAddress() {
-      this.$router.push({ path: '/address' })
+      this.$router.push({ path: '/Address' })
     },
     gotoCart() {
-      this.$router.push({ path: '/cart' })
+      this.$router.push({ path: '/Cart' })
     },
     searchByKeywords() {
       if (this.keyword !== '') {
@@ -104,8 +104,8 @@ export default {
     signOut() {
       localStorage.removeItem('loginUserName');
       localStorage.removeItem('loginUserType');
-      // window.location.reload();
       this.$router.replace({path: '/login'})
+      window.location.reload();
     },
     toggleDark,
     markRaw,

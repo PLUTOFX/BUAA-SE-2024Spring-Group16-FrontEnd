@@ -210,7 +210,7 @@ export default {
         // 结算逻辑待补充
       	},
 		clickToShop() {
-			this.$router.push({ path: `/shopDetail/${this.goods.shopId}` })
+			this.$router.push({ path: `/ShopDetail/${this.goods.shopId}` })
 		},
 		addToCartRequest() {
 			addToCart(this.buyInfo).then(res => {
@@ -344,7 +344,7 @@ export default {
 				if (res.stateCode == '200') {
 					if (res.data.length == 0) {
 						ElMessage.info('请先设置收货地址');
-						this.$router.push('/address');
+						this.$router.push('/Address');
 					} else {
 						this.userAddress = res.data;
 						console.log(this.userAddress);
