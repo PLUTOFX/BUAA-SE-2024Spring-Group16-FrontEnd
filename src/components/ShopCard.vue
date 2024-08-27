@@ -31,7 +31,7 @@ export default {
 	methods: {
 		openShop() {
 			
-			this.$router.replace({ path: '/shopDetail/' + this.shopId });
+			this.$router.replace({ path: '/ShopDetail/' + this.shopId });
 			// this.goodsDetails(id);
 			// window.open('//' + window.location.host + '/goodsDetail?shopId=' + id)
 		},

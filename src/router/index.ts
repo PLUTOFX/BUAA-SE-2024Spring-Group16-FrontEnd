@@ -3,7 +3,8 @@ import Homepage from '../views/Buyer/Homepage.vue';
 import Reviewpage from '~/views/Buyer/Reviewpage.vue';
 import path from 'path';
 import { compile } from 'vue';
-//
+import { componentSizeMap } from 'element-plus';
+
 const routes = [
   {
     path: '/',
@@ -24,13 +25,13 @@ const routes = [
     component: () => import("../views/Register.vue")
   },
   {
-    path: '/goodsDetail/:goodsId', 
-    name: 'goodsDetail',
+    path: '/GoodsDetail/:goodsId', 
+    name: 'GoodsDetail',
     component: () => import("../views/Details/GoodsDetail.vue")
   },
   {
-    path: '/shopDetail/:shopId',
-    name: 'shopDetail',
+    path: '/ShopDetail/:shopId',
+    name: 'ShopDetail',
     component: ()=>import("../views/Details/ShopDetail.vue")
   },
   {
@@ -39,17 +40,17 @@ const routes = [
     component: () => import("../views/Buyer/SearchResult.vue")
   },
   {
-    path:'/cart',
-    name:'cart',
+    path:'/Cart',
+    name:'Cart',
     component:()=> import("../views/Buyer/Cart.vue")
   },
   {
-    path:'/address',
-    name:'address',
+    path:'/Address',
+    name:'Address',
     component:()=>import("../views/Buyer/Address.vue")
   },
   {
-    path: '/Comment',
+    path: '/Comment/:goodsId',
     name: 'Comment',
     component: () => import("../views/Buyer/Commentpage.vue")
   },
@@ -67,8 +68,12 @@ const routes = [
     path: '/Seller/Goodslist',
     name: 'Goodslist',
     component: () => import("../views/Seller/GoodsList.vue")
-  }
-
+  },
+  // {
+  //   path: '/Personal',
+  //   name: 'PersonalInfo',
+  //   component: () => import("../views/Buyer/PersonalInfo.vue")
+  // }
 ];
 
 const router = createRouter({
