@@ -1,16 +1,16 @@
 // axios default config（applications are in './apis.js')
 import axios from 'axios'
-console.log('NODE_ENV', process.env.NODE_ENV);
-const env = process.env.NODE_ENV;
-const urlEnv = {
-  development: 'http://localhost:8888',
-  production: 'http://localhost:32180'
-};
+// console.log('NODE_ENV', process.env.NODE_ENV);
+// const env = process.env.NODE_ENV;
+// const urlEnv = {
+//   development: 'http://localhost:8888',
+//   production: 'http://localhost:32180'
+// };
 
-const BASE_URL = urlEnv[env];
+// const BASE_URL = urlEnv[env];
 axios.defaults.timeout = 10000
 axios.defaults.headers.post['Content-Type'] = 'application/x-www=form-urlencoded'
-axios.defaults.baseURL = BASE_URL;
+// axios.defaults.baseURL = BASE_URL;
 export default {
   fetchGet (url, params = {}) {
     return new Promise((resolve, reject) => {
