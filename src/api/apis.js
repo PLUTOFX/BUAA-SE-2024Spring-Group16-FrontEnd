@@ -42,7 +42,7 @@ export const subscribeShop = params => http.fetchPost(`/favorite_shop/add?userna
 export const cancelCollectingProduct = params => http.fetchPost(`/favorite/remove?username=${params.username}&pid=${params.pid}`, params);
 
 // Cancel subscribing shop
-export const cancelSubscribingShop = params => http.fetchPost(`favorite_shop/remove?username=${params.username}&sid=${params.sid}`, params);
+export const cancelSubscribingShop = params => http.fetchPost(`/favorite_shop/remove?username=${params.username}&sid=${params.sid}`, params);
 
 // check if shop is subscribed 
 export const checkShopSubscribed = params => http.fetchPost(`/favorite_shop/isFavorite?username=${params.username}&sid=${params.sid}`, params);
